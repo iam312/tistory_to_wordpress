@@ -12,7 +12,7 @@
             <excerpt:encoded><![CDATA[]]></excerpt:encoded>
             <wp:post_id>{{loop.index}}</wp:post_id>
             <wp:post_date>{{ post.regdate }}</wp:post_date>
-            <wp:post_date_gmt>2015-12-31 08:31:48</wp:post_date_gmt>
+            <wp:post_date_gmt>2000-01-01 00:00:00</wp:post_date_gmt>
             <wp:comment_status>open</wp:comment_status>
             <wp:ping_status>open</wp:ping_status>
             <wp:post_name>%ec%9d%b4%eb%af%b8%ec%a7%80-%ed%85%8c%ec%8a%a4%ed%8a%b8</wp:post_name>
@@ -43,20 +43,25 @@
                 <wp:meta_key>geo_public</wp:meta_key>
                 <wp:meta_value><![CDATA[0]]></wp:meta_value>
             </wp:postmeta>
+
+
+        {% for comment in post.comments %}
             <wp:comment>
-                <wp:comment_id>82</wp:comment_id>
-                <wp:comment_author><![CDATA[탕수육]]></wp:comment_author>
-                <wp:comment_author_email>iam312@gmail.com</wp:comment_author_email>
-                <wp:comment_author_url>http://a.b.c</wp:comment_author_url>
+                <wp:comment_id>{{ reply_count|length }}</wp:comment_id>
+                <wp:comment_author><![CDATA[{{ comment.author }}]]></wp:comment_author>
+                <wp:comment_author_email>no_reply@a.b.c</wp:comment_author_email>
+                <wp:comment_author_url>http://a.b.c/</wp:comment_author_url>
                 <wp:comment_author_IP>218.154.8.241</wp:comment_author_IP>
-                <wp:comment_date>2017-01-02 23:30:37</wp:comment_date>
-                <wp:comment_date_gmt>2017-01-02 14:30:37</wp:comment_date_gmt>
-                <wp:comment_content><![CDATA[댓글이 잘 달리나...?
-                    줄 바꿈.
-                    줄 또 바꿈.]]></wp:comment_content>
+                <wp:comment_date>{{ comment.regdate }}</wp:comment_date>
+                <wp:comment_date_gmt>{{ comment.regdate }}</wp:comment_date_gmt>
+                <wp:comment_content><![CDATA[{{ comment.text }}]]></wp:comment_content>
                 <wp:comment_approved>1</wp:comment_approved>
                 <wp:comment_type/>
+                {% if comment.reply_reply %}
+                <wp:comment_parent>{{ reply_count|length - 1 }}</wp:comment_parent>
+                {% else %}
                 <wp:comment_parent>0</wp:comment_parent>
+                {% endif %}
                 <wp:comment_user_id>0</wp:comment_user_id>
                 <wp:commentmeta>
                     <wp:meta_key>akismet_result</wp:meta_key>
@@ -79,37 +84,9 @@
                     <wp:meta_value>a:3:{s:4:"time";d:1483367503.257752895355224609375;s:5:"event";s:15:"status-approved";s:4:"user";s:6:"iam312";}</wp:meta_value>
                 </wp:commentmeta>
             </wp:comment>
-            <wp:comment>
-                <wp:comment_id>83</wp:comment_id>
-                <wp:comment_author><![CDATA[iam312]]></wp:comment_author>
-                <wp:comment_author_email>iam312@gmail.com</wp:comment_author_email>
-                <wp:comment_author_url>http://iam312.wordpress.com/</wp:comment_author_url>
-                <wp:comment_author_IP>218.154.8.241</wp:comment_author_IP>
-                <wp:comment_date>2017-01-02 23:31:44</wp:comment_date>
-                <wp:comment_date_gmt>2017-01-02 14:31:44</wp:comment_date_gmt>
-                <wp:comment_content><![CDATA[아주 잘 달렸어요.
-                    네네 훌륭합니다.]]></wp:comment_content>
-                <wp:comment_approved>1</wp:comment_approved>
-                <wp:comment_type/>
-                <wp:comment_parent>82</wp:comment_parent>
-                <wp:comment_user_id>817159</wp:comment_user_id>
-                <wp:commentmeta>
-                    <wp:meta_key>jabber_published</wp:meta_key>
-                    <wp:meta_value>1483367504</wp:meta_value>
-                </wp:commentmeta>
-                <wp:commentmeta>
-                    <wp:meta_key>akismet_result</wp:meta_key>
-                    <wp:meta_value>false</wp:meta_value>
-                </wp:commentmeta>
-                <wp:commentmeta>
-                    <wp:meta_key>akismet_history</wp:meta_key>
-                    <wp:meta_value>a:3:{s:4:"time";d:1483367505.3244369029998779296875;s:5:"event";s:9:"check-ham";s:4:"user";s:6:"iam312";}</wp:meta_value>
-                </wp:commentmeta>
-                <wp:commentmeta>
-                    <wp:meta_key>email_notification_notqueued</wp:meta_key>
-                    <wp:meta_value>1483367506</wp:meta_value>
-                </wp:commentmeta>
-            </wp:comment>
+            {% set _ = reply_count.append(1) %}
+        {% endfor %}
+
         </item>
     {% endfor %}
 {% endblock %}

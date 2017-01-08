@@ -68,16 +68,31 @@ def parse(raw_html) :
     if comments_area is not None :
         _comments = comments_area.find_all("li")
         for _comment in _comments :
-            comment_author = _comment.find("span", "tit_nickname")
-            comment_regdate = _comment.find("span", "txt_date")
-            if comment_regdate.a is None :
-                continue
-            comment_regdate.a.decompose()
-            comment_text = _comment.find("span", "txt_reply")
+            secret = False
+            if 'rp_secret' in  _comment['class'] :
+                secret = True
+
+            reply_reply = False
+            if 're_reply' in  _comment['class'] :
+                reply_reply = True
+
+            if secret :
+                comment_regdate = "2001.01.01 00:00:00"
+                comment_author = "anonymous"
+                comment_text = "secret comment."
+            else :
+                comment_regdate = _comment.find("span", "txt_date")
+                comment_regdate.a.decompose()
+                comment_regdate = comment_regdate.text
+                comment_author = _comment.find("span", "tit_nickname")
+                comment_author = comment_author.text
+                comment_text = _comment.find("span", "txt_reply")
+                comment_text = comment_text.text
             comment = {}
-            comment["author"] = comment_author.text
-            comment["regdate"] = comment_regdate.text
-            comment["text"] = comment_text.text
+            comment["author"] = comment_author
+            comment["regdate"] = comment_regdate
+            comment["text"] = comment_text
+            comment["reply_reply"] = reply_reply
             comments.append(comment)
 
         post['comments'] = comments

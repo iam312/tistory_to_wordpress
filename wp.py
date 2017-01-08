@@ -7,7 +7,7 @@ from jinja2 import Environment, PackageLoader
 with open('tistory.json') as fp:
     posts = json.load(fp)
 
-posts = posts[:2]
+#posts = posts[460:468]
 
 env = Environment(loader=PackageLoader('wp', 'templates'))
 template = env.get_template('post.xml')
